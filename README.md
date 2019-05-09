@@ -95,3 +95,55 @@ class VotacaoList(generics.ListCreateAPIView):
     queryset = Votacao.objects.all()
     serializer_class = VotacaoSerializer
 ```
+
+## Configurando as urls
+
+No arquivo thevotingapp/urls.py configure:
+
+```
+from . import views
+from django.conf.urls import url
+
+urlpatterns = [
+    url(r'^votacao/$', views.VotacaoList.as_view(), name='votacao-list'),
+    url(r'^votacao/(?P<pk>[0-9]+)/$', views.VotacaoList.as_view(), name='votacao-detail'),
+]
+```
+
+E no arquivo thevotingapi/urls.py:
+
+```
+from django.contrib import admin
+from django.urls import path
+from django.conf.urls import url, include
+
+urlpatterns = [
+    url(r'^', include('thevotingapp.urls')),
+    path('admin/', admin.site.urls),
+]
+```
+
+## Configurando a paginação
+
+No arquivo thevotingapi/settings.py adicione para ter a paginação na requisição:
+
+```
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
+```
+
+## Testando as requisições
+
+Para inserir um valor teste:
+
+```
+curl -X POST http://127.0.0.1:8000/votacao/ -H 'content-type: application/json' -d '{"nome": "teste", "documento": "01191249123","ativo": true,"dataInicio":"2019-05-08","dataFim":"2019-05-09"}'
+```
+
+Para listar os valores:
+```
+curl -X GET http://127.0.0.1:8000/votacao/ -H 'Aceppt: application/json'
+curl -X GET http://127.0.0.1:8000/votacao/?page=2 -H 'Aceppt: application/json'
+```
