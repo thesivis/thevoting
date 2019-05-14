@@ -176,7 +176,7 @@ Com o create-react-app instado digite:
 ```
 create-react-app thevoting-ui
 cd thevoting-ui
-npm install --save react-router-dom react-bootstrap bootstrap jquery react-global-configuration react-bootstrap-table
+npm install --save react-router-dom react-bootstrap bootstrap jquery react-global-configuration react-bootstrap-table moment react-moment
 ```
 
 ## Configuração global 
@@ -242,4 +242,27 @@ remote={true} pagination={true} fetchInfo={ { dataTotalSize: this.state.votacoes
      options={ { noDataText: 'Vazio', onPageChange: this.onPageChange,
         page: this.props.currentPage, hideSizePerPage: true
       } }
+```
+
+## Formatando data na tabela
+
+```
+import moment from 'moment';
+```
+
+Fora da classe adicione:
+```
+function dateFormatter(cell, row) {
+    var date = cell;
+    if(date)
+        return moment.utc(date).format('DD/MM/YYYY');
+    else return "";
+}
+```
+
+E na coluna coloque:
+
+```
+<TableHeaderColumn dataField='dataInicio' width='120' dataFormat={dateFormatter}>Início</TableHeaderColumn>
+
 ```
