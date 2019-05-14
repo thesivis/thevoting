@@ -167,3 +167,12 @@ Para listar os valores:
 curl -X GET http://127.0.0.1:8000/votacao/ -H 'Aceppt: application/json'
 curl -X GET http://127.0.0.1:8000/votacao/?page=2 -H 'Aceppt: application/json'
 ```
+
+
+# Criando o projeto react para UI
+
+Com o create-react-app instado digite:
+
+```
+create-react-app thevoting-ui
+```
