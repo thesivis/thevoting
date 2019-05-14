@@ -175,4 +175,6 @@ Com o create-react-app instado digite:
 
 ```
 create-react-app thevoting-ui
+cd thevoting-ui
+npm install --save react-router-dom react-bootstrap bootstrap jquery
 ```
