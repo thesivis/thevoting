@@ -176,5 +176,45 @@ Com o create-react-app instado digite:
 ```
 create-react-app thevoting-ui
 cd thevoting-ui
-npm install --save react-router-dom react-bootstrap bootstrap jquery
+npm install --save react-router-dom react-bootstrap bootstrap jquery react-global-configuration react-bootstrap-table
+```
+
+## Configuração global 
+
+```
+import config from 'react-global-configuration';
+
+config.set({ 
+  url: 'http://localhost:8000/'
+});
+```
+
+E use como:
+```
+config.get('url')
+```
+
+## Adicionando bootstrap
+No arquivo index.js
+```
+import "bootstrap/dist/css/bootstrap.css";
+```
+
+## Trocar conteudo sem recarregar
+No arquivo index.js
+
+```
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import Votacao from "./componentes/Votacao.js";
+...
+
+ReactDOM.render(
+  <BrowserRouter>
+    <Switch>
+      <Route path="/" exact={true} component={App} />
+      <Route path="/votacao" component={Votacao} />
+    </Switch>
+  </BrowserRouter>,
+  document.getElementById("root")
+);
 ```
