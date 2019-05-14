@@ -7,6 +7,7 @@ virtualenv -p /usr/bin/python3.6 venv
 source venv/bin/activate
 pip install djangorestframework
 pip install django
+pip install django-cors-headers
 pip install psycopg2
 ```
 
@@ -34,6 +35,25 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+```
+
+Ainda nesse arquivo vamos permitir a conexão local.
+
+Na seção INSTALLED_APPS adicione:
+```
+'corsheaders',
+```
+Já na seção de MIDDLEWARE adicione antes de CommonMiddleware:
+
+```
+'corsheaders.middleware.CorsMiddleware',
+'django.middleware.common.CommonMiddleware',
+```
+E por fim ao final do arquivo adicione:
+
+```
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
 ```
 
 ## Criando os Modelos
