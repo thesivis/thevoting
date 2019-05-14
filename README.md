@@ -218,3 +218,28 @@ ReactDOM.render(
   document.getElementById("root")
 );
 ```
+
+## Paginação no BootstrapTable
+```
+constructor
+    this.onPageChange = this.onPageChange.bind(this);
+
+...
+
+onPageChange(page, sizePerPage) {
+    fetch(config.get('url')+'votacao/?page='+page)
+        //.then( response => response.json())
+        .then(function(response){
+            console.log(response);
+            return response.json();
+        })
+        .then(data => this.setState({ votacoes : data, currentPage: page}));
+}
+
+...    
+
+remote={true} pagination={true} fetchInfo={ { dataTotalSize: this.state.votacoes.count } }
+     options={ { noDataText: 'Vazio', onPageChange: this.onPageChange,
+        page: this.props.currentPage, hideSizePerPage: true
+      } }
+```
