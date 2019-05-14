@@ -20,7 +20,8 @@ from rest_framework.authtoken import views as v
 urlpatterns = [
     url(r'^votacao/$', views.VotacaoList.as_view(), name='votacao-list'),
     url(r'^votacao/(?P<pk>[0-9]+)/$', views.VotacaoList.as_view(), name='votacao-detail'),
-    url(r'^api-token-auth/$', views.CustomAuthToken.as_view(),name='api-token-auth'),
+    url(r'^votacao/(?P<pk>[0-9]+)/update$', views.VotacaoUpdateView.as_view(), name='votacao-update'),
+    url(r'^votacao/(?P<pk>[0-9]+)/delete$', views.VotacaoDestroyView.as_view(), name='votacao-delete'),
     url(r'^login/$', views.login_user,name='login_user'),
 ]
 
