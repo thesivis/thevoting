@@ -30,8 +30,9 @@ class VotacaoTable extends Component{
     }
 
     onDeleteRow(row){
+        var promises = [];
         row.forEach(element => {
-            fetch(config.get('url')+'votacao/'+element+'/delete', {method: 'delete'})
+            var p = fetch(config.get('url')+'votacao/'+element+'/delete', {method: 'delete'})
             .then(function(response){
                 if(response.status === 204){
                     console.log("deletado " + element);
@@ -40,12 +41,19 @@ class VotacaoTable extends Component{
                 }
                 return "";
             });
+            promises.push(p);
         });
-        this.onPageChange(this.state.currentPage);
+
+        var object = this;
+
+        Promise.all(promises).then(function(values){
+            object.onPageChange(object.state.currentPage);
+        });
+        
     }
 
     buttonFormatter(cell, row){
-        console.log(row)
+        
         return <Button  href="/votacao" variant="primary">Opções{row.id}</Button>;
     }
 
