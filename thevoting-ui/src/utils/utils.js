@@ -1,4 +1,5 @@
 import moment from "moment";
+import React from 'react';
 
 export function dateFormatter(cell) {
   var date = cell;
@@ -12,4 +13,11 @@ export function booleanFormatter(cell) {
   } else {
     return '<input type="checkbox" disabled />';
   }
+}
+
+
+export function customCheckField (column, attr, editorClass){
+  return (
+    <input key={column} name={column.field} type="checkbox" className={ `${editorClass}` }  { ...attr }/>
+  );
 }

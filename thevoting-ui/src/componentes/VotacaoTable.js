@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import config from 'react-global-configuration';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
-import {dateFormatter, booleanFormatter} from '../utils/utils.js'
-
+import {dateFormatter, booleanFormatter, customCheckField} from '../utils/utils.js'
+import { Button} from "react-bootstrap";
 
 class VotacaoTable extends Component{
     
@@ -16,6 +16,7 @@ class VotacaoTable extends Component{
 
         this.onPageChange = this.onPageChange.bind(this);
         this.onDeleteRow = this.onDeleteRow.bind(this);
+        this.buttonFormatter = this.buttonFormatter.bind(this);
     }
 
     componentDidMount(){
@@ -43,6 +44,11 @@ class VotacaoTable extends Component{
         this.onPageChange(this.state.currentPage);
     }
 
+    buttonFormatter(cell, row){
+        console.log(row)
+        return <Button  href="/votacao" variant="primary">Opções{row.id}</Button>;
+    }
+
     render(){
 
         var options = {
@@ -65,12 +71,13 @@ class VotacaoTable extends Component{
              remote={true} pagination={true} fetchInfo={ { dataTotalSize: this.state.votacoes.count } }
              insertRow={true} deleteRow={true}
              options={ options }>
-                <TableHeaderColumn dataField='id' isKey={true} width='80'>ID</TableHeaderColumn>
+                <TableHeaderColumn dataField='id' editable={false} hiddenOnInsert={true} isKey={true} width='80'>ID</TableHeaderColumn>
                 <TableHeaderColumn dataField='nome' width='300'>Nome</TableHeaderColumn>
                 <TableHeaderColumn dataField='descricao'>Descrição</TableHeaderColumn>
                 <TableHeaderColumn dataField='dataInicio' width='120' dataFormat={dateFormatter}>Início</TableHeaderColumn>
                 <TableHeaderColumn dataField='dataFim' width='120' dataFormat={dateFormatter}>Fim</TableHeaderColumn>
-                <TableHeaderColumn dataField='ativo' width='80' dataAlign='center' dataFormat={booleanFormatter}>Ativo?</TableHeaderColumn>
+                <TableHeaderColumn dataField='ativo'  customInsertEditor={ { getElement: customCheckField } } width='80' dataAlign='center' dataFormat={booleanFormatter}>Ativo?</TableHeaderColumn>
+                <TableHeaderColumn dataField="button" editable={false} hiddenOnInsert={true} width='120' dataFormat={this.buttonFormatter}>Buttons</TableHeaderColumn>
             </BootstrapTable>
         );
 
