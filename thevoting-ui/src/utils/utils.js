@@ -1,5 +1,8 @@
 import moment from "moment";
 import React from 'react';
+import CheckBoxField from "./checkBox.js";
+import DateField from "./date.js";
+
 
 export function dateFormatter(cell) {
   var date = cell;
@@ -18,6 +21,13 @@ export function booleanFormatter(cell) {
 
 export function customCheckField (column, attr, editorClass){
   return (
-    <input key={column} name={column.field} type="checkbox" className={ `${editorClass}` }  { ...attr }/>
+    <CheckBoxField key={column} name={column.field} className={ `${editorClass}` }  { ...attr }/>
   );
 }
+
+export function customDateField (column, attr, editorClass){
+  return (
+    <DateField key={column} name={column.field} className={ `form-control ${editorClass}` }  { ...attr }/>
+  );
+}
+

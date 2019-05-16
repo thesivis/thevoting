@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import config from 'react-global-configuration';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
-import {dateFormatter, booleanFormatter, customCheckField} from '../utils/utils.js'
+import {dateFormatter, booleanFormatter, customCheckField, customDateField} from '../utils/utils.js'
 import { Button} from "react-bootstrap";
 
 class VotacaoTable extends Component{
@@ -17,6 +17,7 @@ class VotacaoTable extends Component{
         this.onPageChange = this.onPageChange.bind(this);
         this.onDeleteRow = this.onDeleteRow.bind(this);
         this.buttonFormatter = this.buttonFormatter.bind(this);
+        this.onAddRow = this.onAddRow.bind(this);
     }
 
     componentDidMount(){
@@ -27,6 +28,13 @@ class VotacaoTable extends Component{
         fetch(config.get('url')+'votacao/?page='+page)
             .then( response => response.json())
             .then(data => this.setState({ votacoes : data, currentPage: page}));
+    }
+
+    onAddRow(row) {
+        // ...
+        console.log('inserindo')
+        console.log(row)
+        fetch(config.get('url')+'votacao/?page='+this.state.page)
     }
 
     onDeleteRow(row){
@@ -54,7 +62,7 @@ class VotacaoTable extends Component{
 
     buttonFormatter(cell, row){
         
-        return <Button  href="/votacao" variant="primary">Opções{row.id}</Button>;
+        return <Button href="/votacao" variant="primary">Opções{row.id}</Button>;
     }
 
     render(){
@@ -65,6 +73,11 @@ class VotacaoTable extends Component{
             page: this.props.currentPage, 
             hideSizePerPage: true,
             onDeleteRow: this.onDeleteRow,
+            insertText : "Novo",
+            deleteText: "Remove",
+            saveText: "Salvar",
+            closeText: "Cancelar",
+            onAddRow: this.onAddRow
         };
 
         const selectRow = {
@@ -82,8 +95,8 @@ class VotacaoTable extends Component{
                 <TableHeaderColumn dataField='id' editable={false} hiddenOnInsert={true} isKey={true} width='80'>ID</TableHeaderColumn>
                 <TableHeaderColumn dataField='nome' width='300'>Nome</TableHeaderColumn>
                 <TableHeaderColumn dataField='descricao'>Descrição</TableHeaderColumn>
-                <TableHeaderColumn dataField='dataInicio' width='120' dataFormat={dateFormatter}>Início</TableHeaderColumn>
-                <TableHeaderColumn dataField='dataFim' width='120' dataFormat={dateFormatter}>Fim</TableHeaderColumn>
+                <TableHeaderColumn dataField='dataInicio' width='120'  dataFormat={dateFormatter} customInsertEditor={ { getElement: customDateField } }>Início</TableHeaderColumn>
+                <TableHeaderColumn dataField='dataFim' width='120'  dataFormat={dateFormatter} customInsertEditor={ { getElement: customDateField } }>Fim</TableHeaderColumn>
                 <TableHeaderColumn dataField='ativo'  customInsertEditor={ { getElement: customCheckField } } width='80' dataAlign='center' dataFormat={booleanFormatter}>Ativo?</TableHeaderColumn>
                 <TableHeaderColumn dataField="button" editable={false} hiddenOnInsert={true} width='120' dataFormat={this.buttonFormatter}>Buttons</TableHeaderColumn>
             </BootstrapTable>

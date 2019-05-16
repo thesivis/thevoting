@@ -6,6 +6,7 @@ import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import "./index.css";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Votacao from "./componentes/Votacao.js";
+import "react-datepicker/dist/react-datepicker.css";
 
 ReactDOM.render(
   <BrowserRouter>
