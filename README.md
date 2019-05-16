@@ -176,7 +176,7 @@ Com o create-react-app instado digite:
 ```
 create-react-app thevoting-ui
 cd thevoting-ui
-npm install --save react-router-dom react-bootstrap bootstrap jquery react-global-configuration react-bootstrap-table moment react-moment react react-dom react-scripts
+npm install --save react-router-dom react-bootstrap bootstrap jquery react-global-configuration react-bootstrap-table moment react-moment react react-dom react-scripts react-dates
 ```
 
 ## Configuração global 
