@@ -18,6 +18,7 @@ class VotacaoTable extends Component{
         this.onDeleteRow = this.onDeleteRow.bind(this);
         this.buttonFormatter = this.buttonFormatter.bind(this);
         this.onAddRow = this.onAddRow.bind(this);
+        this.afterSaveCell = this.afterSaveCell.bind(this);
     }
 
     componentDidMount(){
@@ -32,9 +33,31 @@ class VotacaoTable extends Component{
 
     onAddRow(row) {
         // ...
-        console.log('inserindo')
-        console.log(row)
-        fetch(config.get('url')+'votacao/?page='+this.state.page)
+        var object = this;
+
+        var ano = row.dataInicio.getFullYear();
+        var mes = row.dataInicio.getMonth() + 1;
+        var dia = row.dataInicio.getDate();
+        row.dataInicio = ano + "-" + mes + "-" + dia;
+
+        ano = row.dataFim.getFullYear();
+        mes = row.dataFim.getMonth() + 1;
+        dia = row.dataFim.getDate();
+        row.dataFim = ano + "-" + mes + "-" + dia;
+
+        var options = {
+            method: "post",
+            credentials: "same-origin",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json, text/plain, */*',                  
+            },
+            body: JSON.stringify(row)
+        };
+
+        fetch(config.get('url')+'votacao/', options)
+            .then( response => response.json())
+            .then(r => object.onPageChange(object.state.currentPage));
     }
 
     onDeleteRow(row){
@@ -65,6 +88,26 @@ class VotacaoTable extends Component{
         return <Button href="/votacao" variant="primary">Opções{row.id}</Button>;
     }
 
+    afterSaveCell(row, cellName, cellValue) {
+        // do your stuff...
+        row[cellName] = cellValue;
+        
+        var options = {
+            method: "put",
+            credentials: "same-origin",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json, text/plain, */*',                  
+            },
+            body: JSON.stringify(row)
+        };
+
+        var object = this;
+        fetch(config.get('url')+'votacao/'+row.id+'/update', options)
+            .then( response => response.json())
+            .then(r => object.onPageChange(object.state.currentPage));
+    }
+
     render(){
 
         var options = {
@@ -85,16 +128,23 @@ class VotacaoTable extends Component{
             cliclToSelct: true
         };
 
+        const cellEdit = {
+            mode: 'click',
+            blurToSave: true,
+            afterSaveCell: this.afterSaveCell,
+          };
+
         return (
 
             <BootstrapTable data={ this.state.votacoes.results } version="4"
              selectRow={ selectRow }
              remote={true} pagination={true} fetchInfo={ { dataTotalSize: this.state.votacoes.count } }
-             insertRow={true} deleteRow={true}
+             insertRow={true} deleteRow={true} cellEdit={ cellEdit }
              options={ options }>
                 <TableHeaderColumn dataField='id' editable={false} hiddenOnInsert={true} isKey={true} width='80'>ID</TableHeaderColumn>
                 <TableHeaderColumn dataField='nome' width='300'>Nome</TableHeaderColumn>
                 <TableHeaderColumn dataField='descricao'>Descrição</TableHeaderColumn>
+                <TableHeaderColumn dataField='documento' hidden={true}>Documento</TableHeaderColumn>
                 <TableHeaderColumn dataField='dataInicio' width='120'  dataFormat={dateFormatter} customInsertEditor={ { getElement: customDateField } }>Início</TableHeaderColumn>
                 <TableHeaderColumn dataField='dataFim' width='120'  dataFormat={dateFormatter} customInsertEditor={ { getElement: customDateField } }>Fim</TableHeaderColumn>
                 <TableHeaderColumn dataField='ativo'  customInsertEditor={ { getElement: customCheckField } } width='80' dataAlign='center' dataFormat={booleanFormatter}>Ativo?</TableHeaderColumn>

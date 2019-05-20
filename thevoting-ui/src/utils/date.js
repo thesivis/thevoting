@@ -17,8 +17,6 @@ class DateField extends Component {
   }
 
   getFieldValue = () => {
-      console.log('field')
-      console.log(this.state.startDate);
       return this.state.startDate;
   }
 
